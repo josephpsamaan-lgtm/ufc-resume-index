@@ -69,6 +69,7 @@ create table if not exists public.fight_data_review_queue (
   severity text not null default 'warning' check (severity in ('info','warning','blocking')),
   details jsonb not null default '{}'::jsonb,
   status text not null default 'pending' check (status in ('pending','resolved','dismissed')),
+  issue_key text unique,
   reviewed_by uuid,
   reviewed_at timestamptz,
   created_at timestamptz not null default now()
