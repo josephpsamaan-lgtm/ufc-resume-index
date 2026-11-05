@@ -8,7 +8,8 @@ create table if not exists public.events (
   location text,
   source_name text,
   source_url text,
-  created_at timestamptz not null default now()
+  created_at timestamptz not null default now(),
+  unique(event_name,event_date)
 );
 create index if not exists events_event_date_idx on public.events(event_date);
 
