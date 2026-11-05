@@ -2,6 +2,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { createHash } from "node:crypto";
 import { buildImportReport } from "../src/import/ufc-csv.js";
 
 const args=process.argv.slice(2);
@@ -67,6 +68,8 @@ for(let i=0;i<bouts.length;i+=200){
   for(const b of chunk){
     const f=fightByKey.get(b.canonicalKey); if(!f) continue;
     sourcePayload.push({fight_id:f.id,source_name:b.sourceName,source_url:b.sourceUrl,source_record_id:b.sourceRecordId,source_license:b.sourceLicense,raw_payload:b.rawPayload,match_confidence:1});
+    if(b.outcomeCategory==="unknown") issues.push({fight_id:f.id,issue_type:"unknown_outcome",severity:"blocking",details:{source:b.sourceName,rowNumber:b.rowNumber,rawPayload:b.rawPayload}});
+    if(!b.method) issues.push({fight_id:f.id,issue_type:"missing_method",severity:"warning",details:{source:b.sourceName,rowNumber:b.rowNumber}});
     if(f.outcome_category!==b.outcomeCategory || (f.method&&b.method&&f.method!==b.method) || (f.finish_round&&b.finishRound&&f.finish_round!==b.finishRound)){
       issues.push({fight_id:f.id,issue_type:"source_conflict",severity:"blocking",details:{incoming:{source:b.sourceName,outcome:b.outcomeCategory,method:b.method,round:b.finishRound},existing:{outcome:f.outcome_category,method:f.method,round:f.finish_round}}});
     }
