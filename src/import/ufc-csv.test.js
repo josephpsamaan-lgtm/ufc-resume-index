@@ -18,6 +18,14 @@ describe("IRW dataset adapter",()=>{
     expect(b.rawPayload.agent_b).toBe("Fighter B");
     expect(b.titleFight).toBe(false);
   });
+  it("normalizes corner order so the same bout has one canonical identity",()=>{
+    const first=normalizeBout({agent_a:"A Fighter",agent_b:"B Fighter",date:"2020-01-01",winner:"A Fighter",method:"KO",finish_round:"Round 2"},"irw","IRW","CC0",2);
+    const reversed=normalizeBout({agent_a:"B Fighter",agent_b:"A Fighter",date:"2020-01-01",winner:"A Fighter",method:"KO",finish_round:"Round 2"},"irw","IRW","CC0",3);
+    expect(first.canonicalKey).toBe(reversed.canonicalKey);
+    expect(first.fighterA).toBe(reversed.fighterA);
+    expect(first.outcomeCategory).toBe(reversed.outcomeCategory);
+    expect(first.finishRound).toBe(2);
+  });
   it("flags missing identities and unknown outcomes instead of guessing",()=>{
     const r=buildImportReport("agent_a,agent_b,date,winner\nA,B,2020-01-01,?\n,,2020-01-02,A","irw","IRW","CC0");
     expect(r.unknownOutcomes).toHaveLength(1);
