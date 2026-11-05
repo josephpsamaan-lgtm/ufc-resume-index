@@ -63,7 +63,7 @@ export function validateCareerScore(input) {
 export function isEligibleForRanking({ completedUfcBouts = 0, debutResult, debutOpponentTop15AtFight }) {
   if (completedUfcBouts >= ELIGIBILITY.minimumCompletedUfcBoutsBeforeFourth) return true;
   return ELIGIBILITY.debutTop15Exception === true
-    && completedUfcBouts >= 1
+    && completedUfcBouts === 1
     && debutResult === "win"
     && debutOpponentTop15AtFight === true;
 }
