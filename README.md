@@ -74,6 +74,27 @@ Imports must be idempotent, deduplicate the same bout across sources, preserve c
 6. Add authenticated admin review/approval and publish only approved ranking snapshots.
 7. Enable scheduled incremental updates only after the provider's terms and technical access are confirmed.
 
+## Historical fight database — current build phase
+
+The repository now includes a source registry, a canonical bout schema, CSV adapters, and a dry-run-first import script.
+
+- Baseline candidate: Item Response Warehouse `ufc_1993_2026` (publisher states 11,323 fights / 4,115 fighters, 1993–2026; CC0 1.0; draws included, no-contests dropped).
+- Supplemental cross-check: N. Bair's 2013–2026 dataset (6,743 fights; CC BY 4.0; attribution required; historical rankings begin in 2013).
+- Tapology remains a preferred manual verification reference, not an automated scraping target absent written permission or an authorized feed.
+- UFCStats-derived repositories are not treated as automatically licensed data. A scraper's software license does not license the underlying fight data.
+
+See [data source registry](data/source-registry.json) and [import instructions](docs/DATA_IMPORT.md).
+
+The importer supports:
+```bash
+node scripts/import-ufc-fights.mjs --file ./data/ufc_1993_2026.csv --schema irw
+node scripts/import-ufc-fights.mjs --file ./data/ufc_all_fights_wide.csv --schema bair
+```
+
+Both commands are dry runs. To stage records in Supabase, first apply `supabase/migrations/0002_canonical_fight_database.sql`, set `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` in a private local environment, and add `--commit`. Imported fights remain `needs_review`; they are not automatically verified or published. Never place the service-role key in frontend code or commit it to GitHub.
+
+**Important:** The data files themselves have not yet been imported into the live database. The CC0 baseline omits no-contests and does not list event names or bout URLs in its published column list. Those gaps require supplemental source reconciliation before the historical database can be called complete.
+
 ## Security
 
 Never place a Supabase service-role key or provider secret in frontend code. Do not enable anonymous write access. Configure Supabase Auth and an explicit admin authorization policy before enabling administrative writes.
