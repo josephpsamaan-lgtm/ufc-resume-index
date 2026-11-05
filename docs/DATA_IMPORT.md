@@ -24,11 +24,11 @@ For the Bair dataset:
 node scripts/import-ufc-fights.mjs --file ./data/ufc_all_fights_wide.csv --schema bair
 ```
 
-The default is a dry run. It reports invalid rows, duplicate canonical keys, unknown outcomes, and missing methods. It does not write to Supabase.
+The default is a dry run. It reports invalid rows, duplicate canonical keys, unknown outcomes, and missing methods. It does not write to Supabase. The importer canonicalizes corner order, preserves the original row, and uses a deterministic bout key so repeated imports do not create duplicate bouts.
 
 ## Stage records into Supabase
 
-After applying `supabase/migrations/0002_canonical_fight_database.sql`, set the database URL and service-role key in your local environment (never commit either secret), then run:
+First apply `supabase/schema.sql` to create the base tables, then apply `supabase/migrations/0002_canonical_fight_database.sql` to add canonical events, bouts, source records, and review queues. Set the database URL and service-role key in your local environment (never commit either secret), then run:
 
 ```bash
 SUPABASE_URL=... SUPABASE_SERVICE_ROLE_KEY=... node scripts/import-ufc-fights.mjs --file ./data/ufc_1993_2026.csv --schema irw --commit
