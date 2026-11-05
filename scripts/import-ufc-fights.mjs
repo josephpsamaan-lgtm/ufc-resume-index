@@ -27,12 +27,12 @@ const supabaseUrl=process.env.SUPABASE_URL;
 const serviceKey=process.env.SUPABASE_SERVICE_ROLE_KEY;
 if (!supabaseUrl || !serviceKey) throw new Error("SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are required for --commit.");
 const base=supabaseUrl.replace(/\/$/,"")+"/rest/v1";
-async function request(table,method,body,query="") {
+async function request(table,method,body,query="",prefer="resolution=merge-duplicates,return=representation") {
   const response=await fetch(`${base}/${table}${query}`,{
     method,headers:{
       apikey:serviceKey,Authorization:`Bearer ${serviceKey}`,
       "Content-Type":"application/json",
-      Prefer:"resolution=merge-duplicates,return=representation"
+      Prefer:prefer
     },body:body?JSON.stringify(body):undefined
   });
   if(!response.ok) throw new Error(`${table} ${response.status}: ${await response.text()}`);
@@ -58,7 +58,7 @@ for(let i=0;i<bouts.length;i+=200){
     finish_time:b.finishTime,weight_class:b.weightClass,title_fight:b.titleFight,
     record_status:"needs_review"
   }));
-  const created=await request("canonical_fights","POST",payload,"?on_conflict=canonical_key");
+  const created=await request("canonical_fights","POST",payload,"?on_conflict=canonical_key","resolution=ignore-duplicates,return=representation");
   inserted+=created.length;
   const keys=chunk.map(b=>b.canonicalKey);
   const existing=await request("canonical_fights","GET",null,`?select=id,canonical_key,outcome_category,method,finish_round&canonical_key=in.(${keys.map(encodeURIComponent).join(",")})`);
@@ -72,7 +72,7 @@ for(let i=0;i<bouts.length;i+=200){
     }
   }
   for(let j=0;j<sourcePayload.length;j+=500) {
-    const records=await request("fight_source_records","POST",sourcePayload.slice(j,j+500),"");
+    const records=await request("fight_source_records","POST",sourcePayload.slice(j,j+500),"","resolution=ignore-duplicates,return=representation");
     sourceRecords+=records.length;
   }
   for(let j=0;j<issues.length;j+=500) {
