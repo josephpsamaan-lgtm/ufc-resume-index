@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="An independent UFC strength-of-schedule and résumé difficulty ranking project.">
+  <title>UFC Résumé Index</title>
+  <style>
+    :root{color-scheme:dark;--bg:#0b0d11;--panel:#151a22;--line:#303846;--text:#f3f5f8;--muted:#9ba6b5;--red:#df454b}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.55 system-ui,-apple-system,Segoe UI,sans-serif}
+    header{border-bottom:1px solid var(--line);padding:18px 5vw;display:flex;justify-content:space-between;align-items:center}
+    main{max-width:1000px;margin:70px auto;padding:0 24px}small,.muted{color:var(--muted)}
+    .tag{color:#ff777d;text-transform:uppercase;letter-spacing:.18em;font-size:12px;font-weight:800}
+    h1{font-size:clamp(42px,7vw,72px);line-height:1.02;letter-spacing:-.05em;margin:14px 0}
+    .panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:24px;margin-top:34px}
+    .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.stat{background:#0e1218;border:1px solid var(--line);padding:15px;border-radius:10px}.stat b{display:block;font-size:24px}
+    a{color:#ff8589}footer{margin-top:70px;border-top:1px solid var(--line);padding:24px 5vw;color:var(--muted)}
+    @media(max-width:650px){.grid{grid-template-columns:repeat(2,1fr)}main{margin-top:42px}}
+  </style>
+</head>
+<body>
+  <header><strong>RÉSUMÉ INDEX</strong><small>UFC STRENGTH OF SCHEDULE · V2.5</small></header>
+  <main>
+    <div class="tag">Independent résumé-ranking project</div>
+    <h1>Who faced the<br><span style="color:var(--red)">hardest road?</span></h1>
+    <p class="muted">A structured evaluation of UFC competition difficulty and how successfully fighters navigated it. This is not a greatest-fighter list, a skill ranking, or a pound-for-pound ranking.</p>
+    <section class="panel">
+      <div class="tag">Scoring framework</div>
+      <h2>Version 2.5 · 100 points</h2>
+      <div class="grid">
+        <div class="stat"><b>45</b><small>Opponent quality + form</small></div>
+        <div class="stat"><b>25</b><small>Fight outcome</small></div>
+        <div class="stat"><b>25</b><small>Career-level factors</small></div>
+        <div class="stat"><b>5</b><small>Context</small></div>
+      </div>
+    </section>
+    <section class="panel">
+      <h2>Development status</h2>
+      <p class="muted">The public leaderboard and administrator review workflow are under construction. Rankings will only be published after the calculated changes and supporting evidence have been reviewed and approved.</p>
+      <p><a href="https://github.com/josephpsamaan-lgtm/ufc-resume-index">View the project repository</a></p>
+    </section>
+    <p class="muted">Historical rankings and championship claims require independent evidence. Automated fight-data imports will only use authorized sources. Preliminary calibration scores are not represented as completed fight-by-fight audits.</p>
+  </main>
+  <footer>UFC Résumé Index · An independent project</footer>
+</body>
+</html>
