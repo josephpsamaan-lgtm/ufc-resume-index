@@ -110,9 +110,9 @@ export function buildImportReport(csvText,schemaName,sourceName,sourceLicense) {
   return {
     schema:schemaName,sourceName,totalRows:rows.length,validRows:bouts.length,
     invalidRows:errors.length,duplicateCanonicalKeys:duplicates.length,
-    unknownOutcomes:unknownOutcomes.length,missingMethods:missingMethod.length,
+    unknownOutcomeCount:unknownOutcomes.length,missingMethods:missingMethod.length,
     errors,duplicates,
-    unknownOutcomeRows:unknownOutcomes.map(b=>({rowNumber:b.rowNumber,fighterA:b.fighterA,fighterB:b.fighterB,date:b.eventDate})),
+    unknownOutcomes:unknownOutcomes.map(b=>({rowNumber:b.rowNumber,fighterA:b.fighterA,fighterB:b.fighterB,date:b.eventDate})),
     bouts
   };
 }
