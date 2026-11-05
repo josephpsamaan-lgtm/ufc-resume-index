@@ -66,17 +66,21 @@ export function normalizeBout(row, schemaName, sourceName, sourceLicense, rowNum
   const a=clean(row[schema.fighterA]), b=clean(row[schema.fighterB]);
   const date=dateOnly(row[schema.date]);
   if (!a || !b || !date || keyName(a)===keyName(b)) return {error:"missing_or_invalid_identity_or_date",rowNumber,row};
-  const names=[keyName(a),keyName(b)].sort();
+  const names=[{name:a,key:keyName(a)},{name:b,key:keyName(b)}].sort((x,y)=>x.key.localeCompare(y.key));
+  const canonicalA=names[0].name, canonicalB=names[1].name;
   const division=clean(row[schema.division]);
-  const canonicalKey=[date,...names,keyName(division)].join("|");
-  const outcome=winnerSide(row,a,b,schema);
-  const winnerFighterName=outcome==="fighter_a_win"?a:outcome==="fighter_b_win"?b:null;
+  const canonicalKey=[date,...names.map(x=>x.key),keyName(division)].join("|");
+  const sourceOutcome=winnerSide(row,a,b,schema);
+  const outcome=(keyName(a)===keyName(canonicalA))
+    ? sourceOutcome
+    : sourceOutcome==="fighter_a_win"?"fighter_b_win":sourceOutcome==="fighter_b_win"?"fighter_a_win":sourceOutcome;
+  const winnerFighterName=sourceOutcome==="fighter_a_win"?a:sourceOutcome==="fighter_b_win"?b:null;
   const sourceUrl=schema.url?clean(row[schema.url]):"";
   const sourceRecordId=sourceUrl || `${date}:${names.join(":")}:${rowNumber}`;
   return {
     canonicalKey,eventName:schema.event?clean(row[schema.event])||null:null,eventDate:date,
-    fighterA:a,fighterB:b,winnerFighterName,outcomeCategory:outcome,
-    method:clean(row[schema.method])||null,finishRound:parseInt(clean(row[schema.round]),10)||null,
+    fighterA:canonicalA,fighterB:canonicalB,winnerFighterName,outcomeCategory:outcome,
+    method:clean(row[schema.method])||null,finishRound:(clean(row[schema.round]).match(/\\d+/)?.[0] ? Number(clean(row[schema.round]).match(/\\d+/)[0]) : null),
     finishTime:schema.time?clean(row[schema.time])||null:null,
     weightClass:division||null,titleFight:clean(row[schema.title])?(/^(true|1|yes|y)$/i.test(clean(row[schema.title]))):null,
     sourceName,sourceLicense,sourceUrl:sourceUrl||null,sourceRecordId,
