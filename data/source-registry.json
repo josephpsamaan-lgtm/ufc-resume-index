@@ -1,0 +1,64 @@
+{
+  "project": "UFC Resume Index",
+  "policy": "Use datasets only where their stated license permits the intended use. Keep source attribution and row-level provenance. Never scrape Tapology or UFC.com without written authorization or an authorized feed.",
+  "sources": [
+    {
+      "id": "irw_ufc_1993_2026",
+      "name": "Item Response Warehouse — ufc_1993_2026",
+      "url": "https://itemresponsewarehouse.org/tables/ufc_1993_2026/",
+      "downloadUrl": "https://redivis.com/api/v1/tables/datapages.irw_competitions%3Av7_1.ufc_1993_2026/rows?format=csv",
+      "license": "CC0 1.0 (as stated by Item Response Warehouse for this released table)",
+      "coverage": "1993–2026; 11,323 bouts, 4,115 fighters",
+      "fields": [
+        "agent_a",
+        "agent_b",
+        "date",
+        "finish_round",
+        "homefield",
+        "method",
+        "title_fight",
+        "weight_class",
+        "winner"
+      ],
+      "limitations": [
+        "Draws retained; no-contests dropped",
+        "No event name or bout URL in the listed table columns",
+        "Source cites a Kaggle dataset scraped from UFCStats; preserve the IRW dataset citation and provenance"
+      ],
+      "role": "historical baseline; not sufficient by itself for no-contests or complete source verification"
+    },
+    {
+      "id": "bair_ufc_2013_2026",
+      "name": "Bair — UFC Data: scorecards, round statistics, and betting odds, 2013 to 2026",
+      "url": "https://github.com/nlbair/ufc-data",
+      "doi": "https://doi.org/10.5281/zenodo.23458636",
+      "license": "CC BY 4.0",
+      "coverage": "2013-02-16 through 2026-10-10; 6,743 fights",
+      "role": "supplemental cross-check for bout outcomes, stats, and historical rankings",
+      "attribution": "Bair, N. (2026). UFC Data: scorecards, round statistics, and betting odds, 2013 to 2026 (Version 0.1.1) [Data set]. Zenodo. https://doi.org/10.5281/zenodo.23458636",
+      "limitations": [
+        "Rankings begin February 2013",
+        "Event dates can differ by a day between sources",
+        "Retain CC BY 4.0 attribution when using or redistributing data"
+      ]
+    },
+    {
+      "id": "ufcstats_scraped_reference",
+      "name": "Greco1899 scrape_ufc_stats",
+      "url": "https://github.com/Greco1899/scrape_ufc_stats",
+      "license": "GPL-3.0 applies to repository code; no separate data license was identified",
+      "role": "schema and field reference only; do not import/redistribute its CSV data until data rights are clarified",
+      "limitations": [
+        "Dataset is scraped from UFCStats",
+        "UFC terms prohibit scraping of covered UFC sites; scope of UFCStats remains unresolved"
+      ]
+    },
+    {
+      "id": "tapology_reference",
+      "name": "Tapology",
+      "url": "https://www.tapology.com/terms_of_use",
+      "license": "No permission for automated extraction established",
+      "role": "manual/source-reference verification only unless written permission or authorized feed is obtained"
+    }
+  ]
+}
