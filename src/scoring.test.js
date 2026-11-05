@@ -56,8 +56,9 @@ describe("eligibility gatekeeper", () => {
     })).toBe(true);
   });
 
-  it("rejects other fighters before the fourth UFC bout", () => {
+  it("rejects other fighters before the fourth UFC bout, except the debut case", () => {
     expect(isEligibleForRanking({ completedUfcBouts: 2 })).toBe(false);
+    expect(isEligibleForRanking({ completedUfcBouts: 2, debutResult: "win", debutOpponentTop15AtFight: true })).toBe(false);
     expect(isEligibleForRanking({
       completedUfcBouts: 1, debutResult: "loss", debutOpponentTop15AtFight: true
     })).toBe(false);
